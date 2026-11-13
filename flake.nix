@@ -8,10 +8,10 @@
   outputs =
     { nixpkgs, ... }:
     let
+      # nixpkgs 26.11 and later no longer support x86_64-darwin.
       systems = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     in
@@ -27,11 +27,10 @@
             packages = [ go ];
 
             # Print only `go: <version>` so `nix develop` stays terse.
-            # `go env GOVERSION` reports the version of the installed binary
-            # (for example go1.27.3); the `${v#go}` expansion strips "go".
+            # Read the pinned package version instead of running `go env`,
+            # which can switch toolchains (GOTOOLCHAIN=auto) or print nothing.
             shellHook = ''
-              v="$(go env GOVERSION)"
-              echo "go: ''${v#go}"
+              echo "go: ${go.version}"
             '';
           };
         }

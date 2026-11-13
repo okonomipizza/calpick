@@ -77,7 +77,7 @@ Sun Mon Tue Wed Thu Fri Sat
 Single date:
 
 ```go
-import "calpick/datepicker"
+import "github.com/okonomipizza/calpick/datepicker"
 
 picked, err := datepicker.Pick(datepicker.WithInitial(time.Now()))
 if err != nil {
@@ -105,9 +105,11 @@ sorts a reversed range. Neither function is safe for concurrent use.
 The package uses only the Go standard library. It contains no cgo code, so
 `GOOS`/`GOARCH` cross-compilation works without a C toolchain.
 
-The module path is currently the local name `calpick`. Before importing the
-library from another module, change it in `go.mod` to the repository path you
-publish under (for example `github.com/<owner>/calpick`).
+The module path is `github.com/okonomipizza/calpick`. Install the command with:
+
+```sh
+go install github.com/okonomipizza/calpick/cmd/calpick@latest
+```
 
 ## Platforms
 

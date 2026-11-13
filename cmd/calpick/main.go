@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"calpick/datepicker"
+	"github.com/okonomipizza/calpick/datepicker"
 )
 
 const (

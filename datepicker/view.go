@@ -44,10 +44,26 @@ func (c *calendar) plainLines() []string {
 	return lines
 }
 
-// lines renders the frame with SGR styles. Cursor and today never change the
-// visible width because the escape sequences are zero-width.
+// lines renders the single-date frame with SGR styles. Cursor and today never
+// change the visible width because the escape sequences are zero-width.
 func (c *calendar) lines(now time.Time) []string {
 	today := dateOnly(now)
+	return c.renderLines(func(date time.Time) string {
+		switch {
+		case sameDate(date, c.cursor) && sameDate(date, today):
+			return "\x1b[1;4;7m"
+		case sameDate(date, c.cursor):
+			return "\x1b[7m"
+		case sameDate(date, today):
+			return "\x1b[4m"
+		}
+		return ""
+	})
+}
+
+// renderLines renders the frame using style for each day cell. A nil style
+// renders plain text.
+func (c *calendar) renderLines(style func(time.Time) string) []string {
 	loc := c.month.Location()
 
 	lines := make([]string, 0, c.height())
@@ -65,22 +81,15 @@ func (c *calendar) lines(now time.Time) []string {
 
 			date := time.Date(c.month.Year(), c.month.Month(), day, 0, 0, 0, 0, loc)
 			cell := fmt.Sprintf("%3d", day)
-
-			style := ""
-			switch {
-			case sameDate(date, c.cursor) && sameDate(date, today):
-				style = "\x1b[1;4;7m"
-			case sameDate(date, c.cursor):
-				style = "\x1b[7m"
-			case sameDate(date, today):
-				style = "\x1b[4m"
+			code := ""
+			if style != nil {
+				code = style(date)
 			}
-
-			if style == "" {
+			if code == "" {
 				b.WriteString(cell)
 				continue
 			}
-			b.WriteString(style)
+			b.WriteString(code)
 			b.WriteString(cell)
 			b.WriteString("\x1b[0m")
 		}

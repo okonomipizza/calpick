@@ -22,6 +22,7 @@ func TestParseOne(t *testing.T) {
 		{name: "right l", input: "l", want: keyEvent(keyRight), consumed: 1},
 		{name: "up k", input: "k", want: keyEvent(keyUp), consumed: 1},
 		{name: "down j", input: "j", want: keyEvent(keyDown), consumed: 1},
+		{name: "select space", input: " ", want: keyEvent(keySelect), consumed: 1},
 		{name: "arrow up", input: "\x1b[A", want: keyEvent(keyUp), consumed: 3},
 		{name: "arrow down", input: "\x1b[B", want: keyEvent(keyDown), consumed: 3},
 		{name: "arrow right", input: "\x1b[C", want: keyEvent(keyRight), consumed: 3},

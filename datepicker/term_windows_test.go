@@ -46,6 +46,7 @@ func TestParseKeyMappings(t *testing.T) {
 		{"escape", keyEventRecord{virtualKeyCode: vkEscape}, keyCancel, true},
 		{"q", keyEventRecord{unicodeChar: 'q'}, keyCancel, true},
 		{"ctrl-c", keyEventRecord{unicodeChar: 0x03}, keyCancel, true},
+		{"space", keyEventRecord{unicodeChar: ' '}, keySelect, true},
 		{"j", keyEventRecord{unicodeChar: 'j'}, keyDown, true},
 		{"unknown", keyEventRecord{unicodeChar: 'x'}, keyNone, false},
 	}

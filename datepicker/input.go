@@ -23,6 +23,7 @@ const (
 	keyCancel
 	keyPageUp
 	keyPageDown
+	keySelect
 )
 
 type event struct {
@@ -73,6 +74,8 @@ func runeKey(r rune) (keyKind, bool) {
 		return keyUp, true
 	case 'j', 'J':
 		return keyDown, true
+	case ' ':
+		return keySelect, true
 	}
 	return keyNone, false
 }

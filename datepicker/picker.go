@@ -12,10 +12,12 @@ var ErrCanceled = errors.New("datepicker: canceled")
 
 type config struct {
 	initial time.Time
+	until   time.Time
 }
 
-// Option configures Pick. Option values are produced by this package
-// (currently only WithInitial); external packages cannot define new options.
+// Option configures Pick or PickRange. Option values are produced by this
+// package (currently WithInitial and WithInitialRange); external packages
+// cannot define new options.
 type Option func(*config)
 
 // WithInitial sets the date and month shown when the picker starts.
@@ -23,6 +25,15 @@ type Option func(*config)
 func WithInitial(t time.Time) Option {
 	return func(c *config) {
 		c.initial = t
+	}
+}
+
+// WithInitialRange sets the From and Until dates shown by PickRange. A zero
+// until means the same day as from; reversed dates are sorted.
+func WithInitialRange(from, until time.Time) Option {
+	return func(c *config) {
+		c.initial = from
+		c.until = until
 	}
 }
 

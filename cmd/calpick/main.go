@@ -13,11 +13,13 @@ import (
 
 const (
 	dateLayout = "2006-01-02"
-	usage      = `usage: calpick [--range] [YYYY-MM-DD] [YYYY-MM-DD]
+	version    = "v0.1.1"
+	usage      = `usage: calpick [--range] [--version] [YYYY-MM-DD] [YYYY-MM-DD]
 
 Interactive terminal date picker.
 
   --range                 select a From/Until range instead of one date
+  --version, -v           print the version and exit
   YYYY-MM-DD              initial date (single mode)
   YYYY-MM-DD YYYY-MM-DD   initial From and Until (range mode)
 
@@ -36,6 +38,7 @@ Single mode prints the selected date as YYYY-MM-DD. Range mode prints
 type cliArgs struct {
 	rangeMode bool
 	help      bool
+	version   bool
 	from      time.Time
 	until     time.Time
 	hasFrom   bool
@@ -50,11 +53,19 @@ func main() {
 		fmt.Print(usage)
 		return
 	}
+	if args.version {
+		fmt.Println(versionLine())
+		return
+	}
 	if args.rangeMode {
 		runRange(args)
 		return
 	}
 	runSingle(args)
+}
+
+func versionLine() string {
+	return "calpick " + version
 }
 
 func runSingle(args cliArgs) {
@@ -88,6 +99,8 @@ func parseArguments(args []string) (cliArgs, error) {
 		switch arg {
 		case "--range":
 			parsed.rangeMode = true
+		case "--version", "-v":
+			parsed.version = true
 		case "-h", "--help":
 			parsed.help = true
 		default:
@@ -97,7 +110,7 @@ func parseArguments(args []string) (cliArgs, error) {
 			dates = append(dates, arg)
 		}
 	}
-	if parsed.help {
+	if parsed.help || parsed.version {
 		return parsed, nil
 	}
 

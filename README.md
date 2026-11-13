@@ -29,6 +29,7 @@ go run ./cmd/calpick
 go run ./cmd/calpick 2026-01-01          # start at a specific date
 go run ./cmd/calpick --range             # From = Until = today
 go run ./cmd/calpick --range 2026-11-01 2026-11-30
+go run ./cmd/calpick --version
 ```
 
 The single-date mode prints the selected date as `YYYY-MM-DD`. Range mode
@@ -124,3 +125,7 @@ least 28 columns and 8 rows. Range mode adds one status row, so it needs 28
 columns and 7-9 rows depending on the displayed month (9 is the safe minimum).
 If a month grows too tall, the picker shows the required size; PageUp/PageDown
 still work so a shorter month can be selected.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

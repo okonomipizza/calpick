@@ -36,6 +36,26 @@ func TestParseArguments(t *testing.T) {
 			want: cliArgs{rangeMode: true},
 		},
 		{
+			name: "version",
+			args: []string{"--version"},
+			want: cliArgs{version: true},
+		},
+		{
+			name: "short version",
+			args: []string{"-v"},
+			want: cliArgs{version: true},
+		},
+		{
+			name: "version with extra arguments",
+			args: []string{"--range", "--version", "extra"},
+			want: cliArgs{rangeMode: true, version: true},
+		},
+		{
+			name: "help wins over version",
+			args: []string{"--version", "--help"},
+			want: cliArgs{version: true, help: true},
+		},
+		{
 			name: "range with two dates",
 			args: []string{"--range", "2026-11-15", "2026-11-20"},
 			want: cliArgs{rangeMode: true, from: nov15, until: nov20, hasFrom: true},
@@ -94,12 +114,18 @@ func TestParseArguments(t *testing.T) {
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
-			if got.rangeMode != tt.want.rangeMode || got.help != tt.want.help || got.hasFrom != tt.want.hasFrom {
+			if got.rangeMode != tt.want.rangeMode || got.help != tt.want.help || got.version != tt.want.version || got.hasFrom != tt.want.hasFrom {
 				t.Fatalf("args = %+v, want %+v", got, tt.want)
 			}
 			if !got.from.Equal(tt.want.from) || !got.until.Equal(tt.want.until) {
 				t.Fatalf("dates = %v..%v, want %v..%v", got.from, got.until, tt.want.from, tt.want.until)
 			}
 		})
+	}
+}
+
+func TestVersionLine(t *testing.T) {
+	if got, want := versionLine(), "calpick v0.1.1"; got != want {
+		t.Fatalf("versionLine() = %q, want %q", got, want)
 	}
 }
